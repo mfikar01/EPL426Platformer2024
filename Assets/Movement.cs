@@ -15,7 +15,7 @@ public class Movement : MonoBehaviour
     public float jumpForce = 1;
     public float slideSpeed = 5;
     public float wallJumpLerp = 10;
-    public float dashSpeed = 10000;
+    public float dashSpeed = 100;
 
     [Space]
     [Header("Booleans")]
