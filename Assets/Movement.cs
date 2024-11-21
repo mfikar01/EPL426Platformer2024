@@ -6,8 +6,9 @@ using DG.Tweening;
 public class Movement : MonoBehaviour
 {
     private Collision coll;
+    private Animator animator; // Reference to the Animator
     [HideInInspector]
-    public Rigidbody rb;  // Changed Rigidbody2D to Rigidbody
+    public Rigidbody rb;
 
     [Space]
     [Header("Stats")]
@@ -31,31 +32,34 @@ public class Movement : MonoBehaviour
 
     public int side = 1;
 
-    // Removed "Polish" section for particle systems and other visuals.
-
-    // Start is called before the first frame update
     void Start()
     {
         canMove = true;
         coll = GetComponent<Collision>();
-        rb = GetComponent<Rigidbody>();  // Changed Rigidbody2D to Rigidbody
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>(); // Get the Animator component
 
         // Lock Z-axis to keep movement constrained to 2D plane
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         float xRaw = Input.GetAxisRaw("Horizontal");
         float yRaw = Input.GetAxisRaw("Vertical");
-        Debug.Log("Can Move: " + canMove);
+
         // Use Vector3 for 3D direction; Z is always zero to stay on 2D plane
         Vector3 dir = new Vector3(x, y, 0);
 
         Walk(dir);
+
+        // Update Animator parameters for movement
+        bool isMoving = Mathf.Abs(x) > 0 || Mathf.Abs(y) > 0;
+        animator.SetBool("Moving", isMoving);
+        animator.SetFloat("InputX", x);
+        animator.SetFloat("InputY", y);
 
         // Wall grabbing and wall sliding conditions
         if (coll.onWall && Input.GetButton("Fire3") && canMove)
@@ -78,17 +82,16 @@ public class Movement : MonoBehaviour
 
         if (wallGrab && !isDashing)
         {
-            rb.useGravity = false;  // Gravity off for wall grab
+            rb.useGravity = false;
             if (x > .2f || x < -.2f)
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
 
             float speedModifier = y > 0 ? .5f : 1;
-
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, y * (speed * speedModifier), 0);
         }
         else
         {
-            rb.useGravity = true;  // Gravity back on when not grabbing wall
+            rb.useGravity = true;
         }
 
         // Wall sliding logic
@@ -108,7 +111,11 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             if (coll.onGround)
-                Jump(Vector3.up, false);  // Changed Vector2 to Vector3
+            {
+                Jump(Vector3.up, false);
+                animator.SetBool("Grounded", false); // Trigger jump animation
+            }
+
             if (coll.onWall && !coll.onGround)
                 WallJump();
         }
@@ -125,15 +132,15 @@ public class Movement : MonoBehaviour
         {
             GroundTouch();
             groundTouch = true;
+
+            // Trigger grounded animation
+            animator.SetBool("Grounded", true);
         }
 
         if (!coll.onGround && groundTouch)
         {
             groundTouch = false;
         }
-
-        // Commented out visual particle effects for wall interactions
-        // WallParticle(y);
 
         if (wallGrab || wallSlide || !canMove)
             return;
@@ -143,24 +150,19 @@ public class Movement : MonoBehaviour
     {
         hasDashed = false;
         isDashing = false;
-        // Commented out particle effects for ground touch
-        // jumpParticle.Play();
     }
 
     private void Dash(float x, float y)
     {
-        // Commented out camera shake and visual effects for dashing
-        // Camera.main.transform.DOComplete();
-        // Camera.main.transform.DOShakePosition(.2f, .5f, 14, 90, false, true);
-        // FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
-
         hasDashed = true;
-
-        rb.linearVelocity = Vector3.zero;  // Changed Vector2 to Vector3
+        rb.linearVelocity = Vector3.zero;
         Vector3 dir = new Vector3(x, y, 0);
 
         rb.linearVelocity += dir.normalized * dashSpeed;
         StartCoroutine(DashWait());
+
+        // Trigger dash animation
+        animator.SetTrigger("Victory"); // Example: Use "Victory" for dashing
     }
 
     private void WallSlide()
@@ -175,7 +177,7 @@ public class Movement : MonoBehaviour
         }
         float push = pushingWall ? 0 : rb.linearVelocity.x;
 
-        rb.linearVelocity = new Vector3(push, -slideSpeed, 0);  // Changed to Vector3
+        rb.linearVelocity = new Vector3(push, -slideSpeed, 0);
     }
 
     private void Walk(Vector3 dir)
@@ -188,33 +190,25 @@ public class Movement : MonoBehaviour
 
         if (!wallJumped)
         {
-            rb.linearVelocity = new Vector3(dir.x * speed, rb.linearVelocity.y, 0);  // Keep Z at 0 for 2D movement
+            rb.linearVelocity = new Vector3(dir.x * speed, rb.linearVelocity.y, 0);
         }
         else
         {
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, (new Vector3(dir.x * speed, rb.linearVelocity.y, 0)), wallJumpLerp * Time.deltaTime);
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, new Vector3(dir.x * speed, rb.linearVelocity.y, 0), wallJumpLerp * Time.deltaTime);
         }
     }
 
     private void Jump(Vector3 dir, bool wall)
     {
-        // slideParticle.transform.parent.localScale = new Vector3(ParticleSide(), 1, 1);
-        // ParticleSystem particle = wall ? wallJumpParticle : jumpParticle;
-
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);  // Reset Y and Z
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
         rb.linearVelocity += dir * jumpForce;
-
-        // particle.Play();
     }
 
     IEnumerator DashWait()
     {
-        // Commented out particle effects for dashing
-        // FindObjectOfType<GhostTrail>().ShowGhost();
         StartCoroutine(GroundDash());
         DOVirtual.Float(14, 0, .8f, RigidbodyDrag);
 
-        // dashParticle.Play();
         rb.useGravity = false;
         GetComponent<BetterJumping>().enabled = false;
         wallJumped = true;
@@ -222,7 +216,6 @@ public class Movement : MonoBehaviour
 
         yield return new WaitForSeconds(.3f);
 
-        // dashParticle.Stop();
         rb.useGravity = true;
         GetComponent<BetterJumping>().enabled = true;
         wallJumped = false;
@@ -244,35 +237,15 @@ public class Movement : MonoBehaviour
         Vector3 wallDir = coll.onRightWall ? Vector3.left : Vector3.right;
 
         Jump((Vector3.up / 1.5f + wallDir / 1.5f), true);
-
         wallJumped = true;
+
+        // Trigger wall jump animation
+        animator.SetBool("Jump", true);
     }
 
     void RigidbodyDrag(float x)
     {
         rb.linearDamping = x;
-    }
-
-    // Commented out particle effects for wall interactions
-    // void WallParticle(float vertical)
-    // {
-    //     var main = slideParticle.main;
-    //
-    //     if (wallSlide || (wallGrab && vertical < 0))
-    //     {
-    //         slideParticle.transform.parent.localScale = new Vector3(ParticleSide(), 1, 1);
-    //         main.startColor = Color.white;
-    //     }
-    //     else
-    //     {
-    //         main.startColor = Color.clear;
-    //     }
-    // }
-
-    int ParticleSide()
-    {
-        int particleSide = coll.onRightWall ? 1 : -1;
-        return particleSide;
     }
 
     IEnumerator DisableMovement(float time)
