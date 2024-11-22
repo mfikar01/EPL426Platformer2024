@@ -15,24 +15,28 @@ public class Collision : MonoBehaviour
     public int wallSide;
 
     [Space]
-    public float collisionRadius = 0.25f;
-    public Vector3 bottomOffset = new Vector3(0, -0.55f, 0);
-    public Vector3 rightOffset = new Vector3(0.55f, 0, 0);
-    public Vector3 leftOffset = new Vector3(-0.55f, 0, 0);
+    public Vector3 groundBoxSize = new Vector3(0.5f, 0.1f, 0.5f); // Size of the ground detection box
+    public Vector3 wallBoxSize = new Vector3(0.1f, 1.0f, 0.5f);   // Size of the wall detection box
+
+    // Adjust offsets for higher boxes
+    public Vector3 bottomOffset = new Vector3(0, -0.45f, 0); // Slightly higher than before
+    public Vector3 rightOffset = new Vector3(0.1f, 0.2f, 0); // Higher to avoid ground overlap
+    public Vector3 leftOffset = new Vector3(-0.1f, 0.2f, 0); // Higher to avoid ground overlap
 
     void Update()
     {
-        // Check if the player is on the ground (using a 3D OverlapSphere)
-        onGround = Physics.CheckSphere(transform.position + bottomOffset, collisionRadius, groundLayer);
-        onWall = Physics.CheckSphere(transform.position + rightOffset, collisionRadius, groundLayer)
-                || Physics.CheckSphere(transform.position + leftOffset, collisionRadius, groundLayer);
+        // Check if the player is on the ground (using a box)
+        onGround = Physics.CheckBox(transform.position + bottomOffset, groundBoxSize / 2, Quaternion.identity, groundLayer);
 
-        onRightWall = Physics.CheckSphere(transform.position + rightOffset, collisionRadius, groundLayer);
-        onLeftWall = Physics.CheckSphere(transform.position + leftOffset, collisionRadius, groundLayer);
+        // Check if the player is touching a wall (using boxes for left and right walls)
+        onRightWall = Physics.CheckBox(transform.position + rightOffset, wallBoxSize / 2, Quaternion.identity, groundLayer);
+        onLeftWall = Physics.CheckBox(transform.position + leftOffset, wallBoxSize / 2, Quaternion.identity, groundLayer);
 
+        // Consolidate wall checks
+        onWall = onRightWall || onLeftWall;
+
+        // Determine the wall side
         wallSide = onRightWall ? -1 : 1;
-
-   
 
         if (onWall)
         {
@@ -54,9 +58,9 @@ public class Collision : MonoBehaviour
     {
         Gizmos.color = Color.red;
 
-        // Use Gizmos.DrawWireSphere for 3D collision visualization
-        Gizmos.DrawWireSphere(transform.position + bottomOffset, collisionRadius);
-        Gizmos.DrawWireSphere(transform.position + rightOffset, collisionRadius);
-        Gizmos.DrawWireSphere(transform.position + leftOffset, collisionRadius);
+        // Draw boxes to visualize collision zones
+        Gizmos.DrawWireCube(transform.position + bottomOffset, groundBoxSize);
+        Gizmos.DrawWireCube(transform.position + rightOffset, wallBoxSize);
+        Gizmos.DrawWireCube(transform.position + leftOffset, wallBoxSize);
     }
 }
