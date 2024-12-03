@@ -271,7 +271,7 @@ namespace KevinIglesias
         ///CHANGE IDLE ANIMATION RANDOMLY
         private void RandomIdle()
         {
-            int randomness = 6; //INCREASE THIS VALUE TO MAKE VARIANT IDLE LESS LIKELY TO APPEAR
+            int randomness = 2; //INCREASE THIS VALUE TO MAKE VARIANT IDLE LESS LIKELY TO APPEAR
             //IF randomValue IS 1 OR 2, THE CHARACTER WILL USE IDLE VARIANT INSTEAD OF DEFAULT IDLE
             int randomValue = Random.Range(0, randomness);
             animator[0].SetInteger("Idle Variant", randomValue);

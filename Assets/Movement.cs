@@ -50,8 +50,23 @@ public class Movement : MonoBehaviour
         float xRaw = Input.GetAxisRaw("Horizontal");
         float yRaw = Input.GetAxisRaw("Vertical");
 
-        // Use Vector3 for 3D direction; Z is always zero to stay on 2D plane
         Vector3 dir = new Vector3(x, y, 0);
+
+        // Check for side mismatch and trigger turn-around
+        if (x != 0 && Mathf.Sign(x) != side)
+        {
+            
+            //animator.SetFloat("Turn", side);
+
+            // Flip the side
+            side = -side;
+
+            // Rotate the character 180 degrees on the Y-axis
+
+            transform.DORotate(new Vector3(0f, transform.eulerAngles.y + 180f, 0f), 0.2f, RotateMode.Fast)
+                         .OnKill(() => CorrectRotationBasedOnSide());
+            //animator.SetFloat("Turn", 0);
+        }
 
         Walk(dir);
 
@@ -146,10 +161,26 @@ public class Movement : MonoBehaviour
             return;
     }
 
+    private void CorrectRotationBasedOnSide()
+    {
+        if (side == 1)
+        {
+            // Face right (0 degrees)
+            transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+        }
+        else if (side == -1)
+        {
+            // Face left (180 degrees)
+            transform.rotation = Quaternion.Euler(0f, 270f, 0f);
+        }
+    }
+
     void GroundTouch()
     {
         hasDashed = false;
         isDashing = false;
+        animator.SetBool("Jump", false);
+        animator.SetBool("Victory", false);
     }
 
     private void Dash(float x, float y)
@@ -162,11 +193,12 @@ public class Movement : MonoBehaviour
         StartCoroutine(DashWait());
 
         // Trigger dash animation
-        animator.SetTrigger("Victory"); // Example: Use "Victory" for dashing
+        animator.SetBool("Victory", true); // Example: Use "Victory" for dashing
     }
 
     private void WallSlide()
     {
+        animator.SetBool("Jump", false);
         if (!canMove)
             return;
 
@@ -202,6 +234,9 @@ public class Movement : MonoBehaviour
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
         rb.linearVelocity += dir * jumpForce;
+
+        // Trigger jump animation
+        animator.SetBool("Jump", true);
     }
 
     IEnumerator DashWait()
