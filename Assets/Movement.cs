@@ -152,6 +152,7 @@ public class Movement : MonoBehaviour
             animator.SetBool("Grounded", true);
         }
 
+
         if (!coll.onGround && groundTouch)
         {
             groundTouch = false;
