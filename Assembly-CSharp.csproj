@@ -61,6 +61,7 @@
     <Analyzer Include="D:\Unity\6000.0.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Camera_Follow.cs" />
     <Compile Include="Assets\Kevin Iglesias\Basic Motions\_DemoScene\Scripts\BasicMotionsCharacterController.cs" />
     <Compile Include="Assets\Kevin Iglesias\Basic Motions\_DemoScene\Scripts\BasicMotionsAnimatorParameterRemover.cs" />
     <Compile Include="Assets\BetterJumping.cs" />
