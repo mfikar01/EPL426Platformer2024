@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
         animator.SetBool("Moving", isMoving);
         animator.SetFloat("InputX", x);
         animator.SetFloat("InputY", y);
-
+        animator.SetBool("onWall", coll.onWall); // Wall collision
         // Wall grabbing and wall sliding conditions
         if (coll.onWall && Input.GetButton("Fire3") && canMove)
         {
