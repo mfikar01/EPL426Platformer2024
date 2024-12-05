@@ -3,37 +3,53 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target; // The player character
-    public Vector2 offset;   // Distance from the center of the camera
-    public Vector2 cameraBounds; // Edges of the screen before camera starts moving
-    public float smoothSpeed = 0.125f; // Smoothing for the camera movement
+    public Vector2 offset;   // Max distance the camera can shift from the target
+    public Vector2 cameraBounds; // Edges of the screen before the camera starts moving
+    public float smoothSpeed = 0.3f; // Higher values for slower, smoother movement
+    public float minCameraHeight = 0f; // Minimum height the camera can move to
 
-    private Vector3 targetPosition;
+    private Vector3 velocity = Vector3.zero; // Used by SmoothDamp for smoothing
 
     void FixedUpdate()
     {
         if (target == null) return;
 
-        // Camera movement logic here (similar to LateUpdate logic)
         UpdateCameraPosition();
     }
 
     void UpdateCameraPosition()
     {
-        float deltaX = target.position.x - transform.position.x;
-        float deltaY = target.position.y - transform.position.y;
+        // Get the current position of the camera
+        Vector3 currentPosition = transform.position;
 
+        // Calculate the target position
+        float targetX = currentPosition.x;
+        float targetY = currentPosition.y;
+
+        float deltaX = target.position.x - currentPosition.x;
+        float deltaY = target.position.y - currentPosition.y;
+
+        // Move the camera horizontally if the player moves past the horizontal bounds
         if (Mathf.Abs(deltaX) > cameraBounds.x)
-            targetPosition.x = target.position.x - Mathf.Sign(deltaX) * cameraBounds.x;
-        else
-            targetPosition.x = transform.position.x;
+        {
+            targetX = target.position.x - Mathf.Sign(deltaX) * cameraBounds.x;
+        }
 
+        // Move the camera vertically if the player moves past the vertical bounds
         if (Mathf.Abs(deltaY) > cameraBounds.y)
-            targetPosition.y = target.position.y - Mathf.Sign(deltaY) * cameraBounds.y;
-        else
-            targetPosition.y = transform.position.y;
+        {
+            targetY = target.position.y - Mathf.Sign(deltaY) * cameraBounds.y;
+        }
 
-        targetPosition.z = transform.position.z;
+        // Clamp the camera position to ensure it doesn't go below the minimum height
+        targetY = Mathf.Max(targetY, minCameraHeight);
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
+        // Apply the offset
+        targetX += offset.x;
+        targetY += offset.y;
+
+        // Smoothly move the camera to the target position using SmoothDamp
+        Vector3 targetPosition = new Vector3(targetX, targetY, currentPosition.z);
+        transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref velocity, smoothSpeed);
     }
 }
