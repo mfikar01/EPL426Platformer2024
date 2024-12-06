@@ -832,13 +832,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
-    'mixamorig:LeftHandIndex1'\n\tTransform 'mixamorig:LeftHandPinky2'\n\tTransform
-    'mixamorig:RightHandRing2'\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform
-    'mixamorig:LeftHandThumb3'\n\tTransform 'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftLeg'\n\tand
-    more ...\n\tFrom animation clip 'mixamo.com'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -974,8 +968,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minHeight: 10
   respawnPosition: {x: 0, y: 0, z: 0}
-  animator: {fileID: 0}
-  respawnDelay: 0.2
+  respawnDelay: 1
+  freezeMaterial: {fileID: 2100000, guid: b62c3722cb9f4d24f9b334bdc92d3333, type: 2}
 --- !u!1 &1100381995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,7 +1216,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: ab89684b90ef7f24aa0860ddbdc5c9be, type: 3}
   m_Resource: {fileID: 8300000, guid: ab89684b90ef7f24aa0860ddbdc5c9be, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.09
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
