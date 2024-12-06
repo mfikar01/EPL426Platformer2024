@@ -197,7 +197,7 @@ public class Movement : MonoBehaviour
         StartCoroutine(DashWait());
 
         // Trigger dash animation
-        animator.SetBool("Victory", true); // Example: Use "Victory" for dashing
+        PlayDashParticles();   
     }
 
     private void WallSlide()
@@ -286,6 +286,19 @@ public class Movement : MonoBehaviour
     {
         rb.linearDamping = x;
     }
+
+    void PlayDashParticles()
+    {
+        if (dashParticle != null)
+        {
+            // Position the particle system at the character's location
+            dashParticle.transform.position = transform.position;
+
+            // Play the particle system
+            dashParticle.Play();
+        }
+    }
+
 
     IEnumerator DisableMovement(float time)
     {

@@ -17,6 +17,9 @@ public class CharacterRespawnWithShader : MonoBehaviour
     private Material[][] originalMaterials; // Store the original materials for all renderers
     private Renderer[] renderers; // All renderers in the character
 
+    public ParticleSystem deathParticle; // Particle system to play on death
+
+
     void Start()
     {
         coll = GetComponent<Collision>();
@@ -57,6 +60,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     {
         isDead = true;
 
+
         // Disable gravity and freeze the object
         if (rb != null)
         {
@@ -90,9 +94,22 @@ public class CharacterRespawnWithShader : MonoBehaviour
                 renderer.materials = freezeMaterials;
             }
         }
+        PlayDeathParticle();
 
         // Call Respawn after a delay
         Invoke(nameof(Respawn), respawnDelay);
+    }
+
+    void PlayDeathParticle()
+    {
+        if (deathParticle != null) // Check if the particle system reference is assigned
+        {
+            // Instantiate the particle system at the character's position and rotation
+            deathParticle.transform.position = transform.position;
+
+            // Play the particle system
+            deathParticle.Play();
+        }
     }
 
     void Respawn()
