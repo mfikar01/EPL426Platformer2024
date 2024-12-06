@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class Movement : MonoBehaviour
 {
+    public ParticleSystem dashParticle;
     private Collision coll;
     private Animator animator; // Reference to the Animator
     [HideInInspector]
@@ -34,6 +35,7 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
+        //dashParticle.Stop();
         canMove = true;
         coll = GetComponent<Collision>();
         rb = GetComponent<Rigidbody>();
@@ -186,6 +188,7 @@ public class Movement : MonoBehaviour
 
     private void Dash(float x, float y)
     {
+        //fire.Play();
         hasDashed = true;
         rb.linearVelocity = Vector3.zero;
         Vector3 dir = new Vector3(x, y, 0);
