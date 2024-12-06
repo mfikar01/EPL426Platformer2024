@@ -6,8 +6,10 @@ public class Collision : MonoBehaviour
 {
     [Header("Layers")]
     public LayerMask groundLayer;
+    public LayerMask Danger;
 
     [Space]
+    public bool onDanger;
     public bool onGround;
     public bool onWall;
     public bool onRightWall;
@@ -19,12 +21,24 @@ public class Collision : MonoBehaviour
     public Vector3 wallBoxSize = new Vector3(0.1f, 1.0f, 0.5f);   // Size of the wall detection box
 
     // Adjust offsets for higher boxes
+    public Vector3 upOffset = new Vector3(0, 0, 0); // Slightly higher than before
     public Vector3 bottomOffset = new Vector3(0, -0.45f, 0); // Slightly higher than before
     public Vector3 rightOffset = new Vector3(0.1f, 0.2f, 0); // Higher to avoid ground overlap
     public Vector3 leftOffset = new Vector3(-0.1f, 0.2f, 0); // Higher to avoid ground overlap
 
     void Update()
     {
+        bool upDanger = Physics.CheckBox(transform.position + upOffset, wallBoxSize / 2, Quaternion.identity, Danger);
+        bool bottomDanger = Physics.CheckBox(transform.position + bottomOffset, groundBoxSize / 2, Quaternion.identity, Danger);
+        bool rightDanger = Physics.CheckBox(transform.position + rightOffset, wallBoxSize / 2, Quaternion.identity, Danger);
+        bool leftDanger = Physics.CheckBox(transform.position + leftOffset, wallBoxSize / 2, Quaternion.identity, Danger);
+
+        onDanger = bottomDanger || rightDanger || leftDanger || upDanger;
+
+        // Debug individual results
+        if (bottomDanger) Debug.Log("Danger detected below!");
+        if (rightDanger) Debug.Log("Danger detected to the right!");
+        if (leftDanger) Debug.Log("Danger detected to the left!");
         // Check if the player is on the ground (using a box)
         onGround = Physics.CheckBox(transform.position + bottomOffset, groundBoxSize / 2, Quaternion.identity, groundLayer);
 

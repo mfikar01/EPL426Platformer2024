@@ -6,6 +6,8 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public Vector3 respawnPosition; // The position to respawn the character
     public float respawnDelay = 2f; // Delay before respawn occurs
 
+
+    private Collision coll;
     private Rigidbody rb; // 3D Rigidbody component
     private bool isDead = false; // To prevent multiple triggers
     private MonoBehaviour[] movementScripts; // Scripts controlling movement
@@ -17,6 +19,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
 
     void Start()
     {
+        coll = GetComponent<Collision>();
         // Set the starting position as the respawn point (can be customized)
         respawnPosition = transform.position;
 
@@ -43,11 +46,12 @@ public class CharacterRespawnWithShader : MonoBehaviour
     void Update()
     {
         // Check if the player falls below the Min_Height
-        if (!isDead && transform.position.y < minHeight)
+        if (!isDead && transform.position.y < minHeight || coll.onDanger)
         {
             TriggerDeath();
         }
     }
+
 
     void TriggerDeath()
     {
