@@ -57,7 +57,7 @@ public class Movement : MonoBehaviour
         Vector3 dir = new Vector3(x, y, 0);
 
         // Check for side mismatch and trigger turn-around
-        if (x != 0 && Mathf.Sign(x) != side)
+        if (x != 0 && Mathf.Sign(x) != side && wallGrab==false)
         {
             
             //animator.SetFloat("Turn", side);
@@ -271,6 +271,7 @@ public class Movement : MonoBehaviour
         }
         // Trigger jump animation
         animator.SetBool("Jump", true);
+        StartCoroutine(CheckIfFalling());
     }
 
     IEnumerator DashWait()
@@ -293,7 +294,17 @@ public class Movement : MonoBehaviour
         wallJumped = false;
         isDashing = false;
     }
+    private IEnumerator CheckIfFalling()
+    {
+        // Wait for a short time (adjust as needed, e.g., 0.2 seconds)
+        yield return new WaitForSeconds(0.2f);
 
+        // Check if still not grounded
+        if (!coll.onGround)
+        {
+            animator.SetBool("Jump", false); // Transition to falling animation
+        }
+    }
     IEnumerator GroundDash()
     {
         yield return new WaitForSeconds(.25f);
