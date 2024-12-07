@@ -901,9 +901,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Moving
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Grounded
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5206415606406005279}
   m_Solo: 0
@@ -1098,8 +1095,8 @@ AnimatorStateTransition:
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.2500001
-  m_TransitionOffset: 0.008604757
-  m_ExitTime: 0.01768074
+  m_TransitionOffset: 0
+  m_ExitTime: 0.017680742
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -3047,7 +3044,7 @@ BlendTree:
     m_DirectBlendParameter: InputX
     m_Mirror: 0
   m_BlendParameter: InputX
-  m_BlendParameterY: InputX
+  m_BlendParameterY: InputY
   m_MinThreshold: 0
   m_MaxThreshold: 0.765625
   m_UseAutomaticThresholds: 1
