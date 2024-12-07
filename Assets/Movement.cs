@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEditor.Rendering;
+using Mono.Cecil.Cil;
 
 public class Movement : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class Movement : MonoBehaviour
     [Space]
     private bool groundTouch;
     private bool hasDashed;
+    public AudioSource dashAudio;
+    public AudioSource landAudio;
+    public AudioSource jumpAudio;
+
+
 
     public int side = 1;
 
@@ -186,25 +192,42 @@ public class Movement : MonoBehaviour
         isDashing = false;
         animator.SetBool("Jump", false);
         animator.SetBool("Victory", false);
+        if (landAudio != null)
+        {
+            landAudio.Play();
+        }
+        else
+        {
+            Debug.LogError("Land AudioSource is not assigned!");
+        }
         StartCoroutine(checkAirSpeed());
 
     }
 
     IEnumerator checkAirSpeed()
     {
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(0.4f);
         if (coll.onGround)
             airspeed = speed; 
     }
 
     private void Dash(float x, float y)
     {
+
+        if (dashAudio != null)
+        {
+            dashAudio.Play();
+        }
+        else
+        {
+            Debug.LogError("Dash AudioSource is not assigned!");
+        }
         //fire.Play();
         hasDashed = true;
         rb.linearVelocity = Vector3.zero;
         Vector3 dir = new Vector3(x, y, 0);
 
-        rb.linearVelocity += dir.normalized * dashSpeed;
+        rb.linearVelocity += dir.normalized * (dashSpeed + 2*airspeed);
         StartCoroutine(DashWait());
 
         // Trigger dash animation
@@ -261,12 +284,20 @@ public class Movement : MonoBehaviour
 
     private void Jump(Vector3 dir, bool wall)
     {
+        if (jumpAudio != null)
+        {
+            jumpAudio.Play();
+        }
+        else
+        {
+            Debug.LogError("Jump AudioSource is not assigned!");
+        }
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
         rb.linearVelocity += dir * jumpForce;
         if (hasDashed && coll.onGround)
         {
             rb.linearVelocity += dir * jumpForce * 1.2f;
-            airspeed = dashSpeed /2;
+            airspeed = dashSpeed /1.7f;
             hasDashed = false;
         }
         // Trigger jump animation
@@ -284,10 +315,22 @@ public class Movement : MonoBehaviour
         wallJumped = true;
         isDashing = true;
 
-
+        bool cond = false, cond2 = false;
+        if (coll.onGround) 
+            cond = true;
+        else
+            cond2 = true;
 
         yield return new WaitForSeconds(.2f);
 
+        if (!coll.onGround && cond==true)
+            hasDashed=false;
+
+        if (coll.onGround && cond2 == true)
+        {
+            hasDashed = false;
+            airspeed = dashSpeed / 1.7f;
+        }
 
         rb.useGravity = true;
         GetComponent<BetterJumping>().enabled = true;

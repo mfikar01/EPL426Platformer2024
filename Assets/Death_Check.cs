@@ -5,7 +5,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public float minHeight = -10f; // The height threshold for triggering death
     public Vector3 respawnPosition; // The position to respawn the character
     public float respawnDelay = 2f; // Delay before respawn occurs
-
+    public DeathCounter deathCounter;// Reference to the DeathCounter script
 
     private Collision coll;
     private Rigidbody rb; // 3D Rigidbody component
@@ -18,6 +18,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     private Renderer[] renderers; // All renderers in the character
 
     public ParticleSystem deathParticle; // Particle system to play on death
+    public AudioSource DeathAudio;
 
 
     void Start()
@@ -59,7 +60,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     void TriggerDeath()
     {
         isDead = true;
-
+        deathCounter.IncrementDeathCount();
 
         // Disable gravity and freeze the object
         if (rb != null)
@@ -109,6 +110,14 @@ public class CharacterRespawnWithShader : MonoBehaviour
 
             // Play the particle system
             deathParticle.Play();
+        }
+        if (DeathAudio != null)
+        {
+            DeathAudio.Play();
+        }
+        else
+        {
+            Debug.LogError("Dash AudioSource is not assigned!");
         }
     }
 
