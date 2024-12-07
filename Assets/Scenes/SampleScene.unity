@@ -1006,11 +1006,11 @@ MonoBehaviour:
   onLeftWall: 0
   wallSide: 0
   groundBoxSize: {x: 0.44, y: 0.06, z: 0.5}
-  wallBoxSize: {x: 0.01, y: 1.5, z: 0.5}
+  wallBoxSize: {x: 0.2, y: 1.5, z: 0.5}
   upOffset: {x: 0, y: 0, z: 0}
   bottomOffset: {x: 0, y: 0.023, z: 0}
-  rightOffset: {x: 0.3, y: 0.83, z: 0}
-  leftOffset: {x: -0.3, y: 0.83, z: 0}
+  rightOffset: {x: 0.32, y: 0.83, z: 0}
+  leftOffset: {x: -0.32, y: 0.83, z: 0}
 --- !u!114 &927190101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1045,8 +1045,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.40560767, y: 1.6177559, z: 0.4739629}
-  m_Center: {x: -0.0037308782, y: 0.8049164, z: 0.026002638}
+  m_Size: {x: 0.6056077, y: 1.6177559, z: 0.4739629}
+  m_Center: {x: -0.0037308782, y: 0.8049164, z: 0}
 --- !u!54 &927190103
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1628,7 +1628,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: ab89684b90ef7f24aa0860ddbdc5c9be, type: 3}
   m_Resource: {fileID: 8300000, guid: ab89684b90ef7f24aa0860ddbdc5c9be, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.69
   m_Pitch: 1
   Loop: 1
   Mute: 0

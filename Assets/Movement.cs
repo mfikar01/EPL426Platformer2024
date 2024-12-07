@@ -28,6 +28,7 @@ public class Movement : MonoBehaviour
     public bool wallJumped;
     public bool wallSlide;
     public bool isDashing;
+    public bool canClimb;
 
     [Space]
     private bool groundTouch;
@@ -38,6 +39,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         //dashParticle.Stop();
+        canClimb = true;
         canMove = true;
         coll = GetComponent<Collision>();
         rb = GetComponent<Rigidbody>();
@@ -49,8 +51,11 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        float x = Input.GetAxisRaw("Horizontal");
+        x = x > 0 ? Mathf.Ceil(x) : Mathf.Floor(x); // Apply ceiling behavior for horizontal input
+        float y = Input.GetAxis("Vertical"); // Keep vertical input as-is if smoothing is desired
+
+
         float xRaw = Input.GetAxisRaw("Horizontal");
         float yRaw = Input.GetAxisRaw("Vertical");
 
@@ -81,10 +86,12 @@ public class Movement : MonoBehaviour
         animator.SetFloat("InputY", y);
         animator.SetBool("onWall", coll.onWall); // Wall collision
         // Wall grabbing and wall sliding conditions
-        if (coll.onWall && Input.GetButton("Fire3") && canMove)
-        {
+        if (Input.GetButton("Fire3"))
+        { if (coll.onWall && canMove && canClimb)
+            { 
             wallGrab = true;
             wallSlide = false;
+        }
         }
 
         if (Input.GetButtonUp("Fire3") || !coll.onWall || !canMove)
@@ -101,12 +108,15 @@ public class Movement : MonoBehaviour
 
         if (wallGrab && !isDashing)
         {
-            rb.useGravity = false;
-            if (x > .2f || x < -.2f)
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
+            if (canClimb)
+            {
+                rb.useGravity = false;
+                if (x > .2f || x < -.2f)
+                    rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
 
-            float speedModifier = y > 0 ? .5f : 1;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, y * (speed * speedModifier), 0);
+                float speedModifier = y > 0 ? .5f : 1;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, y * (speed * speedModifier), 0);
+            }
         }
         else
         {
@@ -142,8 +152,11 @@ public class Movement : MonoBehaviour
         // Dashing
         if (Input.GetButtonDown("Fire1") && !hasDashed)
         {
+            float sidefloat = side;
             if (xRaw != 0 || yRaw != 0)
                 Dash(xRaw, yRaw);
+            else
+                Dash(side, 0);
         }
 
         // Ground touch detection
@@ -271,6 +284,7 @@ public class Movement : MonoBehaviour
         }
         // Trigger jump animation
         animator.SetBool("Jump", true);
+        canClimb = true;
         StartCoroutine(CheckIfFalling());
     }
 
@@ -314,16 +328,26 @@ public class Movement : MonoBehaviour
 
     private void WallJump()
     {
+        canClimb = false;
+        rb.linearVelocity = Vector3.zero;
         StopCoroutine(DisableMovement(0));
         StartCoroutine(DisableMovement(.1f));
 
+        // Determine the wall direction (left or right)
         Vector3 wallDir = coll.onRightWall ? Vector3.left : Vector3.right;
 
-        Jump((Vector3.up / 1.5f + wallDir / 1.5f), true);
+        // Ignore player vertical input during wall jump, enforce fixed vertical motion
+        Vector3 jumpDirection = (Vector3.up / 1.5f + wallDir / 1.5f).normalized;
+
+        // Apply the jump
+        Jump(jumpDirection, true);
+
         wallJumped = true;
 
-        // Trigger wall jump animation
+        // Trigger animations
         animator.SetBool("Jump", true);
+        animator.SetBool("Grounded", false);
+        
     }
 
     void RigidbodyDrag(float x)
