@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEditor.Rendering;
 
 public class Movement : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Movement : MonoBehaviour
     [Space]
     [Header("Stats")]
     public float speed = 30;
+    public float airspeed = 30;
     public float jumpForce = 1;
     public float slideSpeed = 5;
     public float wallJumpLerp = 10;
@@ -184,6 +186,15 @@ public class Movement : MonoBehaviour
         isDashing = false;
         animator.SetBool("Jump", false);
         animator.SetBool("Victory", false);
+        StartCoroutine(checkAirSpeed());
+
+    }
+
+    IEnumerator checkAirSpeed()
+    {
+        yield return new WaitForSeconds(.05f);
+        if (coll.onGround)
+            airspeed = speed; 
     }
 
     private void Dash(float x, float y)
@@ -226,11 +237,25 @@ public class Movement : MonoBehaviour
 
         if (!wallJumped)
         {
-            rb.linearVelocity = new Vector3(dir.x * speed, rb.linearVelocity.y, 0);
+            if (coll.onGround)
+                rb.linearVelocity = new Vector3(dir.x * speed, rb.linearVelocity.y, 0);
+            else
+            {
+                if (airspeed >10)
+                    airspeed = airspeed * 0.97f;
+                rb.linearVelocity = new Vector3(dir.x * airspeed, rb.linearVelocity.y, 0);
+            }
         }
         else
         {
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, new Vector3(dir.x * speed, rb.linearVelocity.y, 0), wallJumpLerp * Time.deltaTime);
+            if (coll.onGround)
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, new Vector3(dir.x * speed, rb.linearVelocity.y, 0), wallJumpLerp * Time.deltaTime);
+            else
+            {
+                if (airspeed >10)
+                    airspeed = airspeed * 0.97f;
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, new Vector3(dir.x * airspeed, rb.linearVelocity.y, 0), wallJumpLerp * Time.deltaTime);
+            }
         }
     }
 
@@ -238,7 +263,12 @@ public class Movement : MonoBehaviour
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
         rb.linearVelocity += dir * jumpForce;
-
+        if (hasDashed && coll.onGround)
+        {
+            rb.linearVelocity += dir * jumpForce * 1.2f;
+            airspeed = dashSpeed /2;
+            hasDashed = false;
+        }
         // Trigger jump animation
         animator.SetBool("Jump", true);
     }
@@ -253,7 +283,10 @@ public class Movement : MonoBehaviour
         wallJumped = true;
         isDashing = true;
 
-        yield return new WaitForSeconds(.3f);
+
+
+        yield return new WaitForSeconds(.2f);
+
 
         rb.useGravity = true;
         GetComponent<BetterJumping>().enabled = true;
@@ -263,7 +296,7 @@ public class Movement : MonoBehaviour
 
     IEnumerator GroundDash()
     {
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(.25f);
         if (coll.onGround)
             hasDashed = false;
     }
