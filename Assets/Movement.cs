@@ -55,7 +55,7 @@ public class Movement : MonoBehaviour
         Vector3 dir = new Vector3(x, y, 0);
 
         // Check for side mismatch and trigger turn-around
-        if (x != 0 && Mathf.Sign(x) != side)
+        if (x != 0 && Mathf.Sign(x) != side && wallGrab==false)
         {
             
             //animator.SetFloat("Turn", side);
