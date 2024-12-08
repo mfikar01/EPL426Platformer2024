@@ -67,6 +67,7 @@
     <Compile Include="Assets\Sun_I_Guess.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Death_Check.cs" />
+    <Compile Include="Assets\ScreenFade.cs" />
     <Compile Include="Assets\Camera_Follow.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />

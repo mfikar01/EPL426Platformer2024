@@ -60,7 +60,7 @@ public class Movement : MonoBehaviour
         float xRaw = Input.GetAxisRaw("Horizontal");
         float yRaw = Input.GetAxisRaw("Vertical");
 
-        Vector3 dir = new Vector3(x, y, 0);
+        Vector3 dir = new Vector3(xRaw, yRaw, 0);
 
         // Check for side mismatch and trigger turn-around
         if (x != 0 && Mathf.Sign(x) != side && wallGrab==false)
@@ -81,20 +81,29 @@ public class Movement : MonoBehaviour
         Walk(dir);
 
         // Update Animator parameters for movement
-        bool isMoving = Mathf.Abs(x) > 0 || Mathf.Abs(y) > 0;
+        bool isMoving = Mathf.Abs(xRaw) > 0 || Mathf.Abs(yRaw) > 0;
         animator.SetBool("Moving", isMoving);
-        animator.SetFloat("InputX", x);
-        animator.SetFloat("InputY", y);
-        animator.SetBool("onWall", coll.onWall); // Wall collision
+        animator.SetFloat("InputX", xRaw);
+        animator.SetFloat("InputY", yRaw);
+        
+        if (wallGrab==false && !coll.onGround)
+        {
+            animator.SetBool("onWall", false);
+            animator.SetBool("Grounded", false);
+        }
+
+        
         // Wall grabbing and wall sliding conditions
         if (coll.onWall && Input.GetButton("Fire3") && canMove)
         {
+            animator.SetBool("onWall", true); // Wall collision
             wallGrab = true;
             wallSlide = false;
         }
 
         if (Input.GetButtonUp("Fire3") || !coll.onWall || !canMove)
         {
+            animator.SetBool("onWall", false); // Wall collision
             wallGrab = false;
             wallSlide = false;
         }
@@ -108,11 +117,11 @@ public class Movement : MonoBehaviour
         if (wallGrab && !isDashing)
         {
             rb.useGravity = false;
-            if (x > .2f || x < -.2f)
+            if (xRaw > .2f || xRaw < -.2f)
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
 
-            float speedModifier = y > 0 ? .5f : 1;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, y * (speed * speedModifier), 0);
+            float speedModifier = yRaw > 0 ? .5f : 1;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, yRaw * (speed * speedModifier), 0);
         }
         else
         {
@@ -213,6 +222,7 @@ public class Movement : MonoBehaviour
 
     private void Dash(float x, float y)
     {
+        rb.linearVelocity = Vector3.zero;
 
         if (dashAudio != null)
         {

@@ -5,7 +5,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public float minHeight = -10f; // The height threshold for triggering death
     public Vector3 respawnPosition; // The position to respawn the character
     public float respawnDelay = 2f; // Delay before respawn occurs
-    public DeathCounter deathCounter;// Reference to the DeathCounter script
+    public DeathCounter deathCounter; // Reference to the DeathCounter script
 
     private Collision coll;
     private Rigidbody rb; // 3D Rigidbody component
@@ -20,24 +20,16 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public ParticleSystem deathParticle; // Particle system to play on death
     public AudioSource DeathAudio;
 
+    public ScreenFade screenFade; // Reference to the ScreenFade script
 
     void Start()
     {
         coll = GetComponent<Collision>();
-        // Set the starting position as the respawn point (can be customized)
-        respawnPosition = transform.position;
-
-        // Get the Rigidbody component
-        rb = GetComponent<Rigidbody>();
-
-        // Get all movement-related scripts (or specific ones if known)
-        movementScripts = GetComponents<MonoBehaviour>();
-
-        // Get the Animator (if available)
-        animator = GetComponent<Animator>();
-
-        // Get all renderers in the character (including children)
-        renderers = GetComponentsInChildren<Renderer>();
+        respawnPosition = transform.position; // Set the starting position as the respawn point
+        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
+        movementScripts = GetComponents<MonoBehaviour>(); // Get all movement-related scripts
+        animator = GetComponent<Animator>(); // Get the Animator component
+        renderers = GetComponentsInChildren<Renderer>(); // Get all renderers in the character
 
         // Store original materials for all renderers
         originalMaterials = new Material[renderers.Length][];
@@ -49,18 +41,27 @@ public class CharacterRespawnWithShader : MonoBehaviour
 
     void Update()
     {
-        // Check if the player falls below the Min_Height
-        if (!isDead && transform.position.y < minHeight || coll.onDanger)
+        // Check if the player falls below the minHeight or touches danger
+        if (!isDead && (transform.position.y < minHeight || coll.onDanger))
         {
             TriggerDeath();
         }
     }
 
-
     void TriggerDeath()
     {
         isDead = true;
         deathCounter.IncrementDeathCount();
+
+        // Trigger screen fade
+        if (screenFade != null)
+        {
+            screenFade.FadeIn(0.5f); // Fade in over 0.5 seconds
+        }
+        else
+        {
+            Debug.LogWarning("ScreenFade reference is missing!");
+        }
 
         // Disable gravity and freeze the object
         if (rb != null)
@@ -95,6 +96,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
                 renderer.materials = freezeMaterials;
             }
         }
+
         PlayDeathParticle();
 
         // Call Respawn after a delay
@@ -103,21 +105,19 @@ public class CharacterRespawnWithShader : MonoBehaviour
 
     void PlayDeathParticle()
     {
-        if (deathParticle != null) // Check if the particle system reference is assigned
+        if (deathParticle != null)
         {
-            // Instantiate the particle system at the character's position and rotation
             deathParticle.transform.position = transform.position;
-
-            // Play the particle system
             deathParticle.Play();
         }
+
         if (DeathAudio != null)
         {
             DeathAudio.Play();
         }
         else
         {
-            Debug.LogError("Dash AudioSource is not assigned!");
+            Debug.LogError("Death AudioSource is not assigned!");
         }
     }
 
@@ -150,6 +150,12 @@ public class CharacterRespawnWithShader : MonoBehaviour
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].materials = originalMaterials[i];
+        }
+
+        // Trigger screen fade out
+        if (screenFade != null)
+        {
+            screenFade.FadeOut(0.5f); // Fade out over 0.5 seconds
         }
 
         // Reset any necessary variables
