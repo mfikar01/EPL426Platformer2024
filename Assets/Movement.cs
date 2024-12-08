@@ -304,6 +304,10 @@ public class Movement : MonoBehaviour
         }
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
         rb.linearVelocity += dir * jumpForce;
+        if (hasDashed && coll.onWall)
+        {
+            rb.linearVelocity += dir * (dashSpeed/20);
+        }
         if (hasDashed && coll.onGround)
         {
             rb.linearVelocity += dir * jumpForce * 1.2f;
