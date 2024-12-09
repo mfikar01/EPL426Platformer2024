@@ -161,4 +161,9 @@ public class CharacterRespawnWithShader : MonoBehaviour
         // Reset any necessary variables
         isDead = false;
     }
+
+    public void SetRespawnPosition(Vector3 pos)
+    {
+        respawnPosition = pos;
+    }
 }
