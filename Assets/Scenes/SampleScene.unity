@@ -284,6 +284,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8985652349729448118, guid: dc8f5a5c6f806c0428e7be120ce3031d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 8985652349731196816, guid: dc8f5a5c6f806c0428e7be120ce3031d, type: 3}
       propertyPath: m_Name
       value: lamppostSmall
@@ -398,6 +402,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2660512029507263799, guid: d75c063b81ec7a34891ce75e6534afa7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 4159717474431292365, guid: d75c063b81ec7a34891ce75e6534afa7, type: 3}
       propertyPath: m_Name
       value: DesignPlane
@@ -455,6 +463,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 627272909422207995, guid: 23e1a83a2d7bca8499f044fd995025b1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 1957250473707423752, guid: 23e1a83a2d7bca8499f044fd995025b1, type: 3}
       propertyPath: m_Name
       value: Cube
@@ -573,6 +585,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6171336773023400930, guid: f2b71e88cba597241a88a7bd56f6419c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 8219582594508513925, guid: f2b71e88cba597241a88a7bd56f6419c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.11
@@ -666,6 +682,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3452947848566781696, guid: 1cbef5c3ce9c52245a731709b0d12ebb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 5381606682588356051, guid: 1cbef5c3ce9c52245a731709b0d12ebb, type: 3}
       propertyPath: m_Name
       value: d (1)
@@ -780,6 +800,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4873755185639011601, guid: f3d26085f0e4c9045b69133b00adf6af, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 7557174544856775360, guid: f3d26085f0e4c9045b69133b00adf6af, type: 3}
       propertyPath: m_Name
       value: Cube (1)
@@ -1008,6 +1032,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1189715931206878503, guid: 0672fe28d4efe5e43902325c555e02aa, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 6728142342553787978, guid: 0672fe28d4efe5e43902325c555e02aa, type: 3}
       propertyPath: m_Name
       value: Cube (2)
@@ -1065,6 +1093,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8857287214385063323, guid: 76d09993fec117b4d84b75cddf7d0cc5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 8857287214386824049, guid: 76d09993fec117b4d84b75cddf7d0cc5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.56
@@ -1227,6 +1259,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: d
       objectReference: {fileID: 0}
+    - target: {fileID: 7017212068904732314, guid: c58c738fe12cf7e4199ea94f53214349, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1442,6 +1478,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bench
       objectReference: {fileID: 0}
+    - target: {fileID: 1679941665397514028, guid: 22d8df88ae660a148883ae69feadf438, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1520,6 +1560,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4658191731049072463, guid: e5ae54d01385a1b49a4f4f931624ce8d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d63ecab3acf656c48b495c2d8829f5b1, type: 2}
     - target: {fileID: 4658191731050799493, guid: e5ae54d01385a1b49a4f4f931624ce8d, type: 3}
       propertyPath: m_Name
       value: Walllamp
