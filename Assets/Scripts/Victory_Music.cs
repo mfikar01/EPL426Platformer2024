@@ -11,12 +11,14 @@ public class VictoryMusicTrigger : MonoBehaviour
     [Header("Player Reference")]
     public GameObject player;           // Reference to the player GameObject
 
+    public PauseMenuController pauseMenuController;
 
     [Header("Fade Settings")]
     public float fadeDuration = 0.5f;   // Time in seconds to fade out the background music
 
     private void OnTriggerEnter(Collider other)
     {
+        StartCoroutine(Wait());
         // Check if the object colliding is the player
         if (other.gameObject == player)
         {
@@ -58,5 +60,13 @@ public class VictoryMusicTrigger : MonoBehaviour
         // Ensure the volume is fully set to 0 and stop the background music
         backgroundMusic.volume = 0;
         backgroundMusic.Stop();
+    }
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(2f);
+        if (pauseMenuController != null)
+        {
+            pauseMenuController.EndGame();
+        }
     }
 }
