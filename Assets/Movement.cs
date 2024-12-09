@@ -399,7 +399,10 @@ public class Movement : MonoBehaviour
             dashParticle.Play();
         }
     }
-
+    public void ResetDash()
+    {
+        hasDashed=false;
+    }
 
     IEnumerator DisableMovement(float time)
     {
