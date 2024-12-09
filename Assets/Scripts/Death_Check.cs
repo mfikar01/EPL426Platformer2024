@@ -7,6 +7,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public float respawnDelay = 2f; // Delay before respawn occurs
     public DeathCounter deathCounter; // Reference to the DeathCounter script
 
+    private Vector3 RestartPos;
     private Collision coll;
     private Rigidbody rb; // 3D Rigidbody component
     private bool isDead = false; // To prevent multiple triggers
@@ -26,6 +27,7 @@ public class CharacterRespawnWithShader : MonoBehaviour
     {
         coll = GetComponent<Collision>();
         respawnPosition = transform.position; // Set the starting position as the respawn point
+        RestartPos = transform.position; // Restart Position
         rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
         movementScripts = GetComponents<MonoBehaviour>(); // Get all movement-related scripts
         animator = GetComponent<Animator>(); // Get the Animator component
@@ -165,5 +167,11 @@ public class CharacterRespawnWithShader : MonoBehaviour
     public void SetRespawnPosition(Vector3 pos)
     {
         respawnPosition = pos;
+    }
+
+    public void Restart()
+    {
+        respawnPosition = RestartPos; // Restart Position
+        Respawn();
     }
 }

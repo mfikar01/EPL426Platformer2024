@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class PauseMenuController : MonoBehaviour
 {
+    [Header("UI Elements")]
     public GameObject pauseMenuCanvas; // Assign in Inspector (PauseMenuCanvas)
+
+    [Header("Audio Clips")]
+    public AudioSource pauseSound; // Assign the pause sound in Inspector
+    public AudioSource resumeSound; // Assign the resume sound in Inspector
+
     private bool isPaused = false; // Pause state
 
     void Update()
@@ -22,7 +28,13 @@ public class PauseMenuController : MonoBehaviour
         // Activate the pause menu
         pauseMenuCanvas.SetActive(true);
 
-        // Make the game slightly darker (Overlay is part of PauseMenuCanvas)
+        // Play pause sound
+        if (pauseSound != null)
+        {
+            pauseSound.Play();
+        }
+
+        // Pause game time
         Time.timeScale = 0f; // Stop time
         isPaused = true;
     }
@@ -32,6 +44,13 @@ public class PauseMenuController : MonoBehaviour
         // Deactivate the pause menu
         pauseMenuCanvas.SetActive(false);
 
+        // Play resume sound
+        if (resumeSound != null)
+        {
+           resumeSound.Play();
+        }
+
+        // Resume game time
         Time.timeScale = 1f; // Resume time
         isPaused = false;
     }

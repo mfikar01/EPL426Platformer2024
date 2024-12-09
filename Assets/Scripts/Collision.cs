@@ -21,14 +21,14 @@ public class Collision : MonoBehaviour
     public Vector3 wallBoxSize = new Vector3(0.1f, 1.0f, 0.5f);   // Size of the wall detection box
 
     // Adjust offsets for higher boxes
-    public Vector3 upOffset = new Vector3(0, 0, 0); // Slightly higher than before
+    public Vector3 upOffset = new Vector3(0, 0.45f, 0); // Slightly higher than before
     public Vector3 bottomOffset = new Vector3(0, -0.45f, 0); // Slightly higher than before
     public Vector3 rightOffset = new Vector3(0.1f, 0.2f, 0); // Higher to avoid ground overlap
     public Vector3 leftOffset = new Vector3(-0.1f, 0.2f, 0); // Higher to avoid ground overlap
 
     void Update()
     {
-        bool upDanger = Physics.CheckBox(transform.position + upOffset, wallBoxSize / 2, Quaternion.identity, Danger);
+        bool upDanger = Physics.CheckBox(transform.position + upOffset, groundBoxSize / 2, Quaternion.identity, Danger);
         bool bottomDanger = Physics.CheckBox(transform.position + bottomOffset, groundBoxSize / 2, Quaternion.identity, Danger);
         bool rightDanger = Physics.CheckBox(transform.position + rightOffset, wallBoxSize / 2, Quaternion.identity, Danger);
         bool leftDanger = Physics.CheckBox(transform.position + leftOffset, wallBoxSize / 2, Quaternion.identity, Danger);
@@ -73,6 +73,7 @@ public class Collision : MonoBehaviour
         Gizmos.color = Color.red;
 
         // Draw boxes to visualize collision zones
+        Gizmos.DrawWireCube(transform.position + upOffset, groundBoxSize);
         Gizmos.DrawWireCube(transform.position + bottomOffset, groundBoxSize);
         Gizmos.DrawWireCube(transform.position + rightOffset, wallBoxSize);
         Gizmos.DrawWireCube(transform.position + leftOffset, wallBoxSize);

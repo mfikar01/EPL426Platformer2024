@@ -11,6 +11,7 @@ public class VictoryMusicTrigger : MonoBehaviour
     [Header("Player Reference")]
     public GameObject player;           // Reference to the player GameObject
 
+
     [Header("Fade Settings")]
     public float fadeDuration = 0.5f;   // Time in seconds to fade out the background music
 
@@ -38,9 +39,10 @@ public class VictoryMusicTrigger : MonoBehaviour
             {
                 Debug.LogWarning("Victory music is either null or already playing.");
             }
-
+            
             // Destroy(gameObject);
-        }
+
+}
     }
 
     private IEnumerator FadeOutBackgroundMusic()
